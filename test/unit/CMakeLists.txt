@@ -17,7 +17,7 @@ target_link_libraries(
 
 target_include_directories(SproutPP_UnitTests PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_private_source_library(SproutPP_UnitTests BoostHeaders)
-catch_discover_tests(SproutPP_UnitTests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+catch_discover_tests(SproutPP_UnitTests)
 
 if (WIN32 AND BUILD_SHARED_LIBS)
     add_custom_command(
