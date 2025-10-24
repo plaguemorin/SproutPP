@@ -19,7 +19,6 @@ class CompositingPropertyResolver : public virtual PropertyResolver {
   std::map<size_t, PropertySourceFactory> _property_source_factory;
 
   void valueChanged(std::string_view propertyName);
-  std::string extractImportConfig(const PropertySource &source) const;
   void handleDynamicSourceNotifications(PropertySource &source);
   std::unique_ptr<PropertySource> loadPropertySourceFromImportString(std::string_view postImport);
 

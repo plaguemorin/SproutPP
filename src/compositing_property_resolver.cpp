@@ -3,16 +3,8 @@
 
 #include <ranges>
 
-namespace framework::impl {
-
-void CompositingPropertyResolver::valueChanged(std::string_view propertyName) {
-}
-
-void CompositingPropertyResolver::registerPropertySourceFactory(std::string_view sourceName, PropertySourceFactory factory) {
-  _property_source_factory.try_emplace(std::hash<std::string_view>{}(sourceName), factory);
-}
-
-std::string CompositingPropertyResolver::extractImportConfig(const PropertySource &source) const {
+namespace {
+std::string extractImportConfig(const framework::PropertySource &source) {
   // Does this source have import lines?
   // Import should be in the form of, <sourceName>:<sourceParam>
   // Like file:/etc/config.properties
@@ -21,6 +13,16 @@ std::string CompositingPropertyResolver::extractImportConfig(const PropertySourc
   return std::holds_alternative<std::string>(importConfig)
              ? std::get<std::string>(importConfig)
              : std::string();
+}
+}// namespace
+
+namespace framework::impl {
+
+void CompositingPropertyResolver::valueChanged(std::string_view propertyName) {
+}
+
+void CompositingPropertyResolver::registerPropertySourceFactory(std::string_view sourceName, PropertySourceFactory factory) {
+  _property_source_factory.try_emplace(std::hash<std::string_view>{}(sourceName), factory);
 }
 
 void CompositingPropertyResolver::handleDynamicSourceNotifications(PropertySource &source) {
