@@ -1,5 +1,4 @@
 #include "property_file_property_source.h"
-#include "utils.h"
 
 #include <fstream>
 #include <sstream>
