@@ -3,7 +3,11 @@
 #include "property_sources/environment_property_source.h"
 
 TEST_CASE("Read env to source") {
+#ifdef _WIN32
+  _putenv_s("TEST", "allo");
+#else
   setenv("TEST", "allo", 1);
+#endif
   framework::impl::EnvironmentPropertySource propsource;
 
   REQUIRE(propsource.hasValues());
