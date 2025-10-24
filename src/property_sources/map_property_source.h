@@ -14,15 +14,41 @@ class MapPropertySource : public PropertySource {
   using Key = decltype(std::hash<std::string_view>{}(""));// should be size_t
   std::map<Key, Value> _properties;
 
-  static constexpr Key geyKey(std::string_view key) {
-    return std::hash<std::string_view>{}(key);
+  /**
+   * FNV-1a 32/64bit algorithm
+   * See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function for more details
+   * 
+   * @param key the key to hash
+   * @return hash
+   */
+  static constexpr Key geyKey(const std::string_view key) {
+    static_assert(sizeof(size_t) == 8 || sizeof(size_t) == 4);
+
+    size_t result;
+    // FNV_offset_basis
+    if constexpr (sizeof(size_t) == 8) {
+      result = 0xcbf29ce484222325;
+    } else {
+      result = 0x811c9dc5;
+    }
+
+    for (const auto &character: key) {
+      result ^= static_cast<size_t>(character);
+      if constexpr (sizeof(size_t) == 8) {
+        result *= 0x100000001b3; // FNV_prime
+      } else {
+        result *= 0x01000193;
+      }
+    }
+
+    return result;
   }
 
 public:
   ~MapPropertySource() override = default;
 
   bool hasValues() const override { return !_properties.empty(); }
-  
+
   bool isStatic() const override { return false; }
 
   bool containsProperty(std::string_view propertyName) const override {
@@ -39,7 +65,7 @@ public:
 
   void setProperty(std::string_view propertyName, const Value &value) {
     _properties.erase(geyKey(propertyName));
-    _properties.emplace(geyKey(propertyName), value);
+    _properties.try_emplace(geyKey(propertyName), value);
     notifyValueChanged(propertyName);
   }
 
