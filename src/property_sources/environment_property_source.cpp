@@ -1,22 +1,9 @@
 
 #include "environment_property_source.h"
 
-#include <stdio.h>
-
-#if defined(WIN) && (_MSC_VER >= 1900)
-#else
-extern char **environ;
-#endif
+#include <cstdlib>
 
 namespace {
-char **getEnv() {
-#if defined(WIN) && (_MSC_VER >= 1900)
-  return *::__p__environ();
-#else
-  return environ;
-#endif
-}
-
 std::string makeName(std::string_view name) {
   std::string result;
 
@@ -30,7 +17,7 @@ std::string makeName(std::string_view name) {
     if (c == '.') {
       result += '_';
     } else if (c != '-') {
-      result += std::toupper(c);
+      result += static_cast<char>(std::toupper(c));
     }
   }
 
@@ -40,25 +27,21 @@ std::string makeName(std::string_view name) {
 
 namespace framework::impl {
 EnvironmentPropertySource::EnvironmentPropertySource() {
-  for (char **e = getEnv(); *e != nullptr; e++) {
-    const auto thisEnv = std::string_view{*e};
-
-    if (const auto eq = thisEnv.find('=');
-        eq != std::string_view::npos) {
-      setProperty(thisEnv.substr(0, eq), std::string{thisEnv.substr(eq + 1)});
-    } else {
-      setProperty(thisEnv, true);
-    }
-  }
+  //
 }
 
 bool EnvironmentPropertySource::containsProperty(std::string_view propertyName) const {
-  return MapPropertySource::containsProperty(makeName(propertyName));
+  const auto name = makeName(propertyName);
+  return std::getenv(name.c_str()) != nullptr;
 }
 
 PropertySource::Value EnvironmentPropertySource::getProperty(std::string_view propertyName) const {
-  return MapPropertySource::getProperty(makeName(propertyName));
+  const auto name = makeName(propertyName);
+
+  if (const auto rc = std::getenv(name.c_str())) {
+    return std::string(rc);
+  }
+
+  return std::monostate{};
 }
-
-
 }// namespace framework::impl
