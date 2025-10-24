@@ -10,7 +10,7 @@ namespace framework::impl {
  */
 class EnvironmentPropertySource : public PropertySource {
 public:
-  EnvironmentPropertySource();
+  EnvironmentPropertySource() = default;
   ~EnvironmentPropertySource() override = default;
 
   bool containsProperty(std::string_view propertyName) const override;

@@ -26,10 +26,6 @@ std::string makeName(std::string_view name) {
 }// namespace
 
 namespace framework::impl {
-EnvironmentPropertySource::EnvironmentPropertySource() {
-  //
-}
-
 bool EnvironmentPropertySource::containsProperty(std::string_view propertyName) const {
   const auto name = makeName(propertyName);
   return std::getenv(name.c_str()) != nullptr;
