@@ -18,7 +18,7 @@ target_compile_definitions(BoostHeaders INTERFACE BOOST_ALL_NO_LIB BOOST_BIND_NO
 file(GLOB BoostSystem_SOURCES "${Boost_SOURCE_DIR}/libs/system/src/*")
 add_library(BoostSystem OBJECT ${BoostSystem_SOURCES})
 target_link_libraries(BoostSystem PUBLIC BoostHeaders)
-target_compile_definitions(BoostSystem PUBLIC BOOST_PROGRAM_OPTIONS_NO_LIB BOOST_ASIO_ENABLE_CANCELIO)
+target_compile_definitions(BoostSystem PUBLIC BOOST_PROGRAM_OPTIONS_NO_LIB BOOST_ASIO_ENABLE_CANCELIO BOOST_SP_USE_STD_ATOMIC)
 
 find_file(HAS_UNISTD_H unistd.h)
 if (HAS_UNISTD_H)

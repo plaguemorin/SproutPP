@@ -14,14 +14,10 @@ function(sproutpp_setup_dependencies)
 
     if (NOT TARGET spdlog::spdlog)
         CPMAddPackage(
-                NAME
-                spdlog
-                VERSION
-                1.15.2
-                GITHUB_REPOSITORY
-                "gabime/spdlog"
-                OPTIONS
-                "SPDLOG_FMT_EXTERNAL ON")
+                NAME spdlog
+                VERSION 1.15.2
+                GITHUB_REPOSITORY "gabime/spdlog"
+                OPTIONS "SPDLOG_FMT_EXTERNAL ON" "SPDLOG_INSTALL ON")
     endif ()
 
     if (NOT TARGET Catch2::Catch2WithMain)

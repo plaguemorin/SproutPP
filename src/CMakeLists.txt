@@ -14,7 +14,8 @@ add_subdirectory(property_sources)
 target_link_libraries(sproutpp_framework PUBLIC sproutpp_interface)
 add_library(sproutpp::framework ALIAS sproutpp_framework)
 
+target_link_system_library(sproutpp_framework PRIVATE spdlog::spdlog_header_only)
+target_link_system_library(sproutpp_framework PRIVATE fmt::fmt-header-only)
+
 target_link_private_source_library(sproutpp_framework BoostHeaders)
-target_link_private_source_library(sproutpp_framework spdlog::spdlog)
-target_link_private_source_library(sproutpp_framework fmt::fmt)
 target_link_private_source_library(sproutpp_framework CLI11::CLI11)

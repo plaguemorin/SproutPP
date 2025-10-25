@@ -14,6 +14,4 @@ target_include_directories(sproutpp_interface INTERFACE
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
 )
 
-target_compile_definitions(sproutpp_interface INTERFACE -DBOOST_NO_STD_TYPEINFO)
-
 add_library(sproutpp::interface ALIAS sproutpp_interface)
