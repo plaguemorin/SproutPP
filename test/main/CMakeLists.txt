@@ -5,8 +5,8 @@ target_link_libraries(
         Catch2Main PRIVATE
         sproutpp::sproutpp_warnings
         sproutpp::sproutpp_options
-        spdlog::spdlog
-        fmt::fmt
+        spdlog::spdlog_header_only
+        fmt::fmt-header-only
 )
 
 target_link_system_libraries(Catch2Main PUBLIC Catch2::Catch2)
